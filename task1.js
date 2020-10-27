@@ -1,20 +1,10 @@
-const readline = require('readline');
+//first parameter
+const number1 = parseInt(process.argv[2]);
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+//second parameter
+const number2 = parseInt(process.argv[3]);
 
-rl.question(`number 1 `, (number1) => {
-
-    rl.question(`number 2 `, (number2) => {
-
-        console.log('sum of two numbers '+(parseInt(number1)+parseInt(number2)));
-        console.log('difference of two numbers '+(parseInt(number1)-parseInt(number2)));
-        console.log('fractions of two numbers '+(parseInt(number1)/parseInt(number2)));
-        console.log('average of two numbers '+(parseInt(number1)+parseInt(number2))/2);
-        
-        rl.close();
-    });
-
-});
+ console.log('sum of two numbers '+(number1+number2));
+ console.log('difference of two numbers '+(number1-number2));
+ console.log('fractions of two numbers '+(number1/number2));
+ console.log('average of two numbers '+(number1+number2)/2);
