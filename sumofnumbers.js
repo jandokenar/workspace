@@ -1,9 +1,8 @@
 const n = parseInt(process.argv[2]);
 
-let sum = [];
+let sum = 0;
 
 for(let i = 0; i < n; i++) {
-    sum[i]=i+1;
+    sum += i+1;
 }
-
-console.log(sum.reduce((a, b) => a + b, 0));
+console.log(sum);
