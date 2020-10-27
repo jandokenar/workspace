@@ -29,9 +29,9 @@ const getValue = function() {
 
  function bFunctiont(){
     let println = "";
-    const result3 = getValue().then((value) => {
+    const result = getValue().then((value) => {
         println = println+"Value 1 is "+println+value.value;
-        const result4 = getValue().then((value) => {
+        const result2 = getValue().then((value) => {
             println = println+" and value 2 is "+value.value;
             console.log(println);
         });
