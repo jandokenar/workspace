@@ -11,5 +11,8 @@ console.log(arr);
 const filtered = arr.filter(element => (element % 3) === 0);
 console.log(filtered);
 
-const another = filtered.map(element => { return element * 2; });
-console.log(another);
+const multiply = filtered.map(element => { return element * 2; });
+console.log(multiply);
+
+const sum = multiply.reduce((a, b) => a + b);
+console.log(sum);
