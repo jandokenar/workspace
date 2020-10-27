@@ -26,7 +26,17 @@ const getValue = function() {
     const result2 = await new getValue();
     console.log("Value 1 is "+result.value+" and value 2 is "+result2.value);
  }
- aFunction(); // returns a promise
 
+ function bFunctiont(){
+    let println = "";
+    const result3 = getValue().then((value) => {
+        println = println+"Value 1 is "+println+value.value;
+        const result4 = getValue().then((value) => {
+            println = println+" and value 2 is "+value.value;
+            console.log(println);
+        });
+    });
+ }
 
-
+ aFunction(); // first method
+ bFunctiont(); //second method
