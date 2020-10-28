@@ -5,6 +5,11 @@ const a = parseInt(process.argv[2]);
 const b = parseInt(process.argv[3]);
 const c = process.argv[4];
 
+if(!a && !b){
+    console.log("give two numbers");
+    process.exit(1);
+}
+
 if(a>b){
     console.log("a is greater");
 } else if(b>a){
