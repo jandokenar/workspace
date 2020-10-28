@@ -24,7 +24,8 @@ const getValue = function() {
  async function aFunction() {
     const result = await new getValue();
     const result2 = await new getValue();
-    console.log("Value 1 is "+result.value+" and value 2 is "+result2.value);
+    //console.log("Value 1 is "+result.value+" and value 2 is "+result2.value);
+    console.log(`Value 1 is ${result.value} and value 2 is ${result2.value}`);
  }
 
  function bFunctiont(){
