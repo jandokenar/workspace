@@ -9,6 +9,11 @@ if n=4, factorial n! = 4* 3 * 2 *1
 
 const n = parseInt(process.argv[2]);
 
+if(!n){
+    console.log("please give one number");
+    process.exit(1);
+}
+
 let fact = 0;
 
 for(let i = n; i > 0; i--) {

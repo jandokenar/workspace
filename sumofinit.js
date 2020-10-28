@@ -8,6 +8,11 @@ ex if n = 17, we'd sum the numbers 3, 5, 6, 9, 10, 12 and 15
 
 const n = parseInt(process.argv[2]);
 
+if(!n){
+    console.log("please give one number");
+    process.exit(1);
+}
+
 let sum = 0;
 for(let i = 0; i < n; i++) {
     const i2 = i+1;
