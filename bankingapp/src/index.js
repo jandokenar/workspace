@@ -1,6 +1,5 @@
 import readline from "readline-sync";
 import * as fs from "fs";
-import { decode } from "punycode";
 
 console.log("Welcome to Roskapankki™ banking CLI!");
 console.log("Type help to get help!");
