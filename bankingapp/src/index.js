@@ -36,7 +36,7 @@ let allUsers = [];
 const readFile = fs.readFileSync("./users.json", "utf-8");
 allUsers = JSON.parse(readFile);
 
-let loginId = -1; // value -1 no user has logged in
+let loginId = -1; // -1 is no user has logged in
 
 const writeUserDB = () => {
     fs.writeFileSync(
@@ -49,7 +49,6 @@ const writeUserDB = () => {
 };
 
 const generateId = (newUser) => {
-    // allUsers[allUsers.length] = newObject;
     allUsers = [...allUsers, newUser];
 };
 
@@ -57,7 +56,6 @@ const createAccount = () => {
     let input = readline.question(`So you want to create a new account!
 Let’s start with the easy question. What is your name? : `);
 
-    // input = readline.question("Account name must be over 3 characters");
     while (input.length < 3) {
         input = readline.question("Your name must be over 3 characters. Give new name : ");
     }
@@ -98,7 +96,7 @@ which gives only you the access to  your account : `);
     writeUserDB();
 };
 
-const withdradFunds = () => {
+const withdrawFunds = () => {
     let input = readline.question(`Okay, let’s whip up some cash for you from these ones and
 zeroes. What is your account ID? : `);
 
@@ -385,7 +383,7 @@ while (inMenus) {
         createAccount();
         break;
     case "withdraw_funds":
-        withdradFunds();
+        withdrawFunds();
         break;
     case "deposit_funds":
         depositFunds();
@@ -414,11 +412,11 @@ while (inMenus) {
     case "accept_fund_request":
         acceptFundReq();
         break;
-    case "debug":
+    /*  case "debug":
         console.log(allUsers);
         console.log("\x1b[32m%s\x1b[33m",
             "°º¤ø,¸¸,ø¤º°`°º¤ø,¸ Roskapankki ,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸");
-        break;
+        break; */
     default:
         console.log("Unknown command. Please try again.");
     }
