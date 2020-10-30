@@ -5,6 +5,7 @@ console.log("\x1b[32m%s\x1b[33m",
     "°º¤ø,¸¸,ø¤º°`°º¤ø,¸ Roskapankki ,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸");
 console.log("");
 console.log("Welcome to Roskapankki™ banking CLI! Type help to get help!");
+console.log("");
 
 const menu = `I’m glad to help you :) Here’s a list of commands you can use!
 
@@ -27,7 +28,8 @@ REQUESTS:
 
 request_funds -- > Opens a dialog for requesting another user for funds.
 funds_requests -- > Shows all the requests for the account funds.
-accept_fund_request -- > Opens a dialog for accepting a fund request.`;
+accept_fund_request -- > Opens a dialog for accepting a fund request.
+`;
 
 let allUsers = [];
 
@@ -406,7 +408,7 @@ while (inMenus) {
     case "request_funds":
         requestFunds();
         break;
-    case "fund_requests":
+    case "funds_requests":
         checkFundReq();
         break;
     case "accept_fund_request":
