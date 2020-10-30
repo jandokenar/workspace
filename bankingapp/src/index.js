@@ -5,44 +5,44 @@ console.log("Welcome to Roskapankki™ banking CLI!");
 console.log("Type help to get help!");
 
 const menu = `I’m glad to help you :) Here’s a list of commands you can use!
-Accounts
+
+ACCOUNTS:
+
 create_account -- > Opens dialog for creating an account.
 close_account -- > Opens a dialog for closing an account.
 modify_account -- > Opens a dialog for modifying an account.
 does_account_exist -- > Opens a dialog for checking if the account exists.
 log_in -- > Opens a dialog for logging in.
 logout -- > Opens a dialog for logging out.
-Funds
+
+FUNDS:
+
 withdraw_funds -- > Opens a dialog for withdrawing funds.
 deposit_funds -- > Opens a dialog for depositing funds.
 transfer_funds -- > Opens a dialog for transferring funds to another account.
-Requests
+
+REQUESTS:
+
 request_funds -- > Opens a dialog for requesting another user for funds.
 funds_requests -- > Shows all the requests for the account funds.
 accept_fund_request -- > Opens a dialog for accepting a fund request.`;
 
+let allUsers = [];
+
 const readFile = fs.readFileSync("./users.json", "utf-8");
+allUsers = JSON.parse(readFile);
 
-const jsonObject = JSON.parse(readFile);
-console.log(jsonObject);
+let loginId = -1; // value -1 no user has logged in
 
-/* const writeUser = (newUser) => {
-    console.log(newUser.id);
-
-    /*jsonObject = {
-        [newUser.id]: newUser,
-    };
-    jsonObject.push(newUser.id+": "+ newUser);
-
+const writeUserDB = () => {
     fs.writeFileSync(
         "./users.json",
-        JSON.stringify(jsonObject),
+        JSON.stringify(allUsers),
         (err) => {
             if (err) console.log(err);
         },
     );
-}; */
-let allUsers = [];
+};
 
 const generateId = (newUser) => {
     // allUsers[allUsers.length] = newObject;
@@ -91,12 +91,13 @@ us a password, which gives only you the access to  your account.`);
         fund_requests: [],
     };
     generateId(account);
-    console.log(allUsers);
+    writeUserDB();
+    // console.log(allUsers);
     // writeUsers(allUsers);
 };
 
 // for DEBUG
-const createAccountDebug = () => {
+/* const createAccountDebug = () => {
     const accountId = allUsers.length + 1;
     const account = {
         name: "Testaaja Teppo",
@@ -106,12 +107,12 @@ const createAccountDebug = () => {
         fund_requests: [],
     };
     generateId(account);
-    console.log(allUsers);
+    // console.log(allUsers);
     // writeUsers(allUsers);
-};
+}; */
 
-createAccountDebug();
-createAccountDebug();
+// createAccountDebug();
+// createAccountDebug();
 
 // createAccount(); // debug
 
@@ -147,6 +148,55 @@ Let’s try a smaller amount`);
     console.log(`Awesome, you can now enjoy your ${withdraw}€ in cash!
 There’s still ${allUsers[userID].balance}€ in your account, safe with us.`);
     console.log(allUsers[userID]);
+    writeUserDB();
+};
+
+const transferFunds = () => {
+    let input = readline.question(`Okay, let’s slide these binary treats in to someone elses
+pockets. Let’s start with your account ID.`);
+
+    let userID = parseInt(input, 10) - 1;
+
+    while (userID > allUsers.length || Number.isNaN(userID) || userID < 0) {
+        input = readline.question(`Mhmm, unfortunately an account with that ID does not exist.
+Try again.`);
+        userID = parseInt(input, 10) - 1;
+    }
+
+    input = readline.question(`Okay, we found an account with that ID.
+You will need to insert your password so we can validate it’s actually you.`);
+
+    while (input !== allUsers[userID].password) {
+        input = readline.question("Ah, there must by a typo. Try typing it again");
+    }
+
+    input = readline.question(`Awesome, we validated you ${allUsers[userID].name}
+How much money do you want to transfer? (Current balance: ${allUsers[userID].balance}€)`);
+    let transfer = parseInt(input, 10);
+
+    while (Number.isNaN(transfer) || transfer > allUsers[userID].balance) {
+        input = readline.question(`Unfortunately you don’t have the balance for that.
+Let’s try a smaller amount`);
+        transfer = parseInt(input, 10);
+    }
+
+    input = readline.question(`Awesome, we can do that. What is the ID of the account you want to
+transfer these funds into?`);
+    let userID2 = parseInt(input, 10) - 1;
+
+    while (userID2 > allUsers.length || Number.isNaN(userID2) || userID2 < 0) {
+        input = readline.question(`Mhmm, unfortunately an account with that ID does not exist.
+Try again.`);
+        userID2 = parseInt(input, 10) - 1;
+    }
+
+    allUsers[userID].balance -= transfer;
+    allUsers[userID2].balance += transfer;
+    console.log(`Awesome. We sent ${transfer}€ in cash! to an account with the ID of
+ ${userID2}.`);
+    // console.log(allUsers[userID]);
+    // console.log(allUsers[userID2]);
+    writeUserDB();
 };
 
 const depositFunds = () => {
@@ -176,13 +226,183 @@ How much money do you want to deposit? (Current balance: ${allUsers[userID].bala
         console.log(`Awesome, we removed ${deposit}€ from existence and
 stored them in to our system. Now your accounts balance is ${allUsers[userID].balance}€.`);
     }
+    writeUserDB();
+    // console.log(allUsers[userID]);
+};
 
-    console.log(allUsers[userID]);
+const doesAccountExist = () => {
+    const input = readline.question(`Mhmm, you want to check if an account with an ID exists.
+Let’s do it! Give us the ID and we’ll check.`);
+
+    const userID = parseInt(input, 10) - 1;
+
+    if (userID >= allUsers.length || Number.isNaN(userID) || userID < 0) {
+        console.log(`Mhmm, unfortunately an account with that ID does not exist.
+Try again.`);
+    } else {
+        console.log(`Awesome! This account actually exists. You should confirm with
+the owner that this account is actually his.`);
+    }
+};
+
+const modifyAccount = () => {
+    let input = readline.question(`Mhmm, you want to modify an accounts stored holder name.
+We can definitely do that! Let’s start validating you with your ID!`);
+
+    let userID = parseInt(input, 10) - 1;
+
+    while (userID > allUsers.length || Number.isNaN(userID) || userID < 0) {
+        input = readline.question(`Mhmm, unfortunately an account with that ID does not exist.
+Try again.`);
+        userID = parseInt(input, 10) - 1;
+    }
+
+    input = readline.question(`Okay, we found an account with that ID.
+You will need to insert your password so we can validate it’s actually you.`);
+
+    while (input !== allUsers[userID].password) {
+        input = readline.question("Ah, there must by a typo. Try typing it again");
+    }
+
+    input = readline.question(`Awesome, we validated you ${allUsers[userID].name}
+What is the new name for the account holder?`);
+
+    while (input === allUsers[userID].name) {
+        input = readline.question(`Mhmm, I’m quite sure this is the same name.
+Try typing it out again.`);
+    }
+    allUsers[userID].name = input;
+    console.log("Ah, there we go. We will address you as Rene Orozs from now on.");
+    writeUserDB();
+    // console.log(allUsers);
+};
+
+const loginAccount = () => {
+    let input = readline.question("So you want to log in? Give us your ID. :");
+
+    let userID = parseInt(input, 10) - 1;
+
+    while (userID > allUsers.length || Number.isNaN(userID) || userID < 0) {
+        input = readline.question(`Mhmm, unfortunately an account with that ID does not exist.
+Try again.`);
+        userID = parseInt(input, 10) - 1;
+    }
+
+    input = readline.question(`Okay, we found an account with that ID.
+You will need to insert your password so we can validate it’s actually you.`);
+
+    while (input !== allUsers[userID].password) {
+        input = readline.question("Ah, there must by a typo. Try typing it again");
+    }
+
+    console.log(`Awesome, we validated you ${allUsers[userID].name}
+You are now logged in`);
+    loginId = userID;
+};
+
+const logoutAccount = () => {
+    if (loginId >= 0) {
+        const input = readline.question("Are you sure you wish to logout? (yes/no) :");
+        if (input === "yes") {
+            console.log(`User ${allUsers[loginId].name} has logged out.`);
+            loginId = -1;
+        }
+    } else {
+        console.log("No user is currently logged in");
+    }
+};
+
+const requestFunds = () => {
+    if (loginId >= 0) {
+        let input = readline.question("So you want request funds from someone? Give us their ID");
+
+        let userID = parseInt(input, 10) - 1;
+
+        while (userID > allUsers.length || Number.isNaN(userID) || userID < 0) {
+            input = readline.question(`Mhmm, unfortunately an account with that ID does not exist.
+        Try again.`);
+            userID = parseInt(input, 10) - 1;
+        }
+
+        input = readline.question(`Okay, we found an account with that ID. 
+How much money do you want to request?`);
+        input = parseInt(input, 10);
+        if (Number.isNaN(input) || input > 0) {
+            console.log(`Awesome! We’ll request that amount from the user with ${userID}.`);
+            let funds = allUsers[userID].fund_requests;
+            const fundReq = {
+                reqid: loginId,
+                amount: input,
+            };
+            funds = [...funds, fundReq];
+            allUsers[userID].fund_requests = funds;
+            console.log(allUsers[userID]);
+            writeUserDB();
+        }
+    } else {
+        console.log("Log in to transfer funds.");
+    }
+};
+
+const checkFundReq = () => {
+    if (loginId >= 0) {
+        let userID = 0;
+        if (allUsers[loginId].fund_requests.length > 0) {
+        // console.log(allUsers[loginId].fund_requests);
+            allUsers[loginId].fund_requests.forEach((element) => {
+                userID = element.reqid + 1; // convert reqId to userID
+                console.log(`${element.amount} for user with ID ${userID}`);
+            });
+        } else {
+            console.log("No fund requests found.");
+        }
+    } else {
+        console.log("Log in to check funds.");
+    }
+};
+
+const acceptFundReq = () => {
+    if (loginId >= 0) {
+        let userID = 0;
+        // console.log(allUsers[loginId].fund_requests);
+        allUsers[loginId].fund_requests.forEach((element) => {
+            userID = element.reqid + 1; // convert reqId to userID
+            const input = readline.question(`Okay, we found a request for your funds of
+${element.amount} euros for user with ID ${userID} Type yes to accept this request.`);
+
+            if (input === "yes") {
+                console.log(`Good! Now these funds has been transferred to the account,
+with ID ${userID}`);
+
+                if (allUsers[loginId].balance >= element.amount) {
+                    allUsers[loginId].balance -= element.amount;
+                    allUsers[userID - 1].balance += element.amount;
+                } else {
+                    console.log("Fund request was rejected. Not enough funds.");
+                }
+            } else {
+                console.log("Fund request was rejected.");
+            }
+        });
+        allUsers[loginId].fund_requests = []; // tyhjennä requestit
+        writeUserDB();
+    } else {
+        console.log("Log in to transfer funds.");
+    }
 };
 
 // debug
-withdradFunds();
-depositFunds();
+// withdradFunds();
+// depositFunds();
+// transferFunds();
+// doesAccountExist();
+// modifyAccount();
+// loginAccount();
+// console.log(loginId);
+// loginId = 0;
+// requestFunds();
+// checkFundReq();
+// acceptFundReq();
 
 let inMenus = true;
 
@@ -194,6 +414,7 @@ while (inMenus) {
         console.log(menu);
         break;
     case "exit":
+        writeUserDB();
         inMenus = false;
         break;
     case "create_account":
@@ -205,7 +426,32 @@ while (inMenus) {
     case "deposit_funds":
         depositFunds();
         break;
+    case "transfer_funds":
+        transferFunds();
+        break;
+    case "does_account_exist":
+        doesAccountExist();
+        break;
+    case "modify_account":
+        modifyAccount();
+        break;
+    case "log_in":
+        loginAccount();
+        break;
+    case "logout":
+        logoutAccount();
+        break;
+    case "request_funds":
+        requestFunds();
+        break;
+    case "fund_requests":
+        checkFundReq();
+        break;
+    case "accept_fund_request":
+        acceptFundReq();
+        break;
     default:
-          // default here
+        console.log(allUsers);
+        console.log("Unknown command. Please try again.");
     }
 }
