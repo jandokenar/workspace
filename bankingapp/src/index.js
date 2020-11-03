@@ -451,14 +451,14 @@ app.post("/bank/:user", (req, res) => {
 
     allUsers = [...allUsers, newUser];
 
-    console.log(allUsers);
+    // console.log(allUsers);
     writeUserDB();
     res.json(newUser);
 });
 
 app.get("/bank/:id/balance", (req, res) => {
     const userID = parseInt(req.params.id, 10);
-    const account = allUsers[userID];
+    const account = allUsers[userID - 1];
     if (account && account.password === req.body.password) {
         res.json(`This account balance is ${account.balance}€.`);
     } else {
@@ -468,7 +468,7 @@ app.get("/bank/:id/balance", (req, res) => {
 
 app.put("/bank/:id/withdraw", (req, res) => {
     const userID = parseInt(req.params.id, 10);
-    const account = allUsers[userID];
+    const account = allUsers[userID - 1];
     const withdraw = parseInt(req.body.amount, 10);
     if (account && account.password === req.body.password &&
         withdraw <= account.balance && withdraw > 0) {
@@ -484,7 +484,7 @@ app.put("/bank/:id/withdraw", (req, res) => {
 
 app.put("/bank/:id/deposit", (req, res) => {
     const userID = parseInt(req.params.id, 10);
-    const account = allUsers[userID];
+    const account = allUsers[userID - 1];
     const deposit = parseInt(req.body.amount, 10);
     if (account && account.password === req.body.password && deposit > 0) {
         account.balance += deposit;
