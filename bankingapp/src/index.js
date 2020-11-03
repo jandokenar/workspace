@@ -4,6 +4,7 @@ import * as fs from "fs";
 // const express = require("express");
 // const bodyParser = require("body-parser");
 
+/*
 import express from "express";
 import bodyParser from "body-parser";
 
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
     console.log("----");
     next();
 });
+*/
 
 console.log("\x1b[32m%s\x1b[33m",
     "°º¤ø,¸¸,ø¤º°`°º¤ø,¸ Roskapankki ,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸");
@@ -49,10 +51,10 @@ funds_requests -- > Shows all the requests for the account funds.
 accept_fund_request -- > Opens a dialog for accepting a fund request.
 `;
 
-let allUsers = [];
+// let allUsers = [];
 
 const readFile = fs.readFileSync("./users.json", "utf-8");
-allUsers = JSON.parse(readFile);
+let allUsers = JSON.parse(readFile);
 
 let loginId = -1; // -1 is no user has logged in
 
@@ -384,7 +386,7 @@ with ID ${userID}`);
     }
 };
 
-let inMenus = false; // disable menus for week2
+let inMenus = true; // disable menus for week2
 
 while (inMenus) {
     const input = readline.question("Please enter a command : ");
@@ -439,7 +441,7 @@ while (inMenus) {
         console.log("Unknown command. Please try again.");
     }
 }
-
+/*
 // WEEK 2 REST API
 
 app.post("/bank/:user", (req, res) => {
@@ -544,3 +546,4 @@ app.put("/bank/:id/password", (req, res) => {
 });
 
 app.listen(5000);
+*/
