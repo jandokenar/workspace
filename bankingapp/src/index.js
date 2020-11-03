@@ -1,6 +1,24 @@
 import readline from "readline-sync";
 import * as fs from "fs";
 
+// const express = require("express");
+// const bodyParser = require("body-parser");
+
+import express from "express";
+import bodyParser from "body-parser";
+
+const app = express();
+app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+    console.log(`METHOD: ${req.method}`);
+    console.log(`PATH: ${req.path}`);
+    console.log("BODY: ", req.body);
+    console.log(`QUERY: ${req.query}`);
+    console.log("----");
+    next();
+});
+
 console.log("\x1b[32m%s\x1b[33m",
     "°º¤ø,¸¸,ø¤º°`°º¤ø,¸ Roskapankki ,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸");
 console.log("");
@@ -366,7 +384,7 @@ with ID ${userID}`);
     }
 };
 
-let inMenus = true;
+let inMenus = false; // disable menus for week2
 
 while (inMenus) {
     const input = readline.question("Please enter a command : ");
@@ -421,3 +439,70 @@ while (inMenus) {
         console.log("Unknown command. Please try again.");
     }
 }
+
+app.post("/bank/:user", (req, res) => {
+    const newUser = {
+        name: req.params.user,
+        password: req.body.password,
+        id: allUsers.length + 1,
+        balance: req.body.deposit,
+        fund_requests: [],
+    };
+
+    allUsers = [...allUsers, newUser];
+
+    console.log(allUsers);
+    writeUserDB();
+    res.json(newUser);
+});
+
+app.get("/bank/:id/balance", (req, res) => {
+    const userID = parseInt(req.params.id, 10);
+    const account = allUsers[userID];
+    if (account && account.password === req.body.password) {
+        res.json(`This account balance is ${account.balance}€.`);
+    } else {
+        res.status(404).end();
+    }
+});
+
+app.put("/bank/:id/withdraw", (req, res) => {
+    const userID = parseInt(req.params.id, 10);
+    const account = allUsers[userID];
+    const withdraw = parseInt(req.body.amount, 10);
+    if (account && account.password === req.body.password &&
+        withdraw <= account.balance && withdraw > 0) {
+        account.balance -= withdraw;
+        res.json(`This account new balance is ${account.balance}€.`);
+    } else if (withdraw > account.balance) {
+        res.json("This account does not have enough balance.");
+    } else {
+        res.status(404).end();
+    }
+    writeUserDB();
+});
+
+app.put("/bank/:id/deposit", (req, res) => {
+    const userID = parseInt(req.params.id, 10);
+    const account = allUsers[userID];
+    const deposit = parseInt(req.body.amount, 10);
+    if (account && account.password === req.body.password && deposit > 0) {
+        account.balance += deposit;
+        res.json(`This account new balance is ${account.balance}€.`);
+    } else {
+        res.status(404).end();
+    }
+    writeUserDB();
+});
+
+app.listen(5000);
+
+/*
+balance: accountBalance,
+const account = {
+name: accountName,
+password: accountPass,
+id: accountId,
+balance: accountBalance,
+fund_requests: [],
+*/
