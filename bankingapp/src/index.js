@@ -440,6 +440,8 @@ while (inMenus) {
     }
 }
 
+// WEEK 2 REST API
+
 app.post("/bank/:user", (req, res) => {
     const newUser = {
         name: req.params.user,
@@ -495,14 +497,50 @@ app.put("/bank/:id/deposit", (req, res) => {
     writeUserDB();
 });
 
-app.listen(5000);
+app.put("/bank/:id/transfer", (req, res) => {
+    const userID = parseInt(req.params.id, 10);
+    const transferID = parseInt(req.body.recipient_id, 10);
+    const account = allUsers[userID - 1];
+    const transferAccount = allUsers[transferID - 1];
+    const transfer = parseInt(req.body.amount, 10);
+    if (transferAccount && account && account.password === req.body.password &&
+        transfer <= account.balance && transfer > 0) {
+        account.balance -= transfer;
+        transferAccount.balance += transfer;
+        res.json(`${transfer}€ transfered to ID: ${transferAccount.id}. ` +
+            `This account new balance is ${account.balance}€.`);
+    } else if (transfer > account.balance) {
+        res.json("This account does not have enough balance.");
+    } else {
+        res.status(404).end();
+    }
+    writeUserDB();
+});
 
-/*
-balance: accountBalance,
-const account = {
-name: accountName,
-password: accountPass,
-id: accountId,
-balance: accountBalance,
-fund_requests: [],
-*/
+app.put("/bank/:id/name", (req, res) => {
+    const userID = parseInt(req.params.id, 10);
+    const newName = req.body.new_name;
+    const account = allUsers[userID - 1];
+    if (account && account.password === req.body.password && newName !== account.name) {
+        account.name = newName;
+        res.json(`This account new name is ${account.name}.`);
+        writeUserDB();
+    } else {
+        res.status(404).end();
+    }
+});
+
+app.put("/bank/:id/password", (req, res) => {
+    const userID = parseInt(req.params.id, 10);
+    const newPass = req.body.new_password;
+    const account = allUsers[userID - 1];
+    if (account && account.password === req.body.password && newPass !== account.password) {
+        account.password = newPass;
+        res.json(`This account new password is ${account.password}.`);
+        writeUserDB();
+    } else {
+        res.status(404).end();
+    }
+});
+
+app.listen(5000);
