@@ -51,10 +51,10 @@ funds_requests -- > Shows all the requests for the account funds.
 accept_fund_request -- > Opens a dialog for accepting a fund request.
 `;
 
-// let allUsers = [];
+let allUsers = [];
 
 const readFile = fs.readFileSync("./users.json", "utf-8");
-let allUsers = JSON.parse(readFile);
+allUsers = JSON.parse(readFile);
 
 let loginId = -1; // -1 is no user has logged in
 

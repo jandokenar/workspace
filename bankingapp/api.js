@@ -10,10 +10,10 @@ app.use(bodyParser.json());
 
 // let allUsers = [];
 
-const readFile = fs.readFileSync("./users.json", "utf-8");
-let allUsers = JSON.parse(readFile);
+// const readFile = fs.readFileSync("./users.json", "utf-8");
+// let allUsers = JSON.parse(readFile);
 
-const writeUserDB = () => {
+const writeUserDB = (allUsers) => {
     fs.writeFileSync(
         "./users.json",
         JSON.stringify(allUsers),
@@ -21,6 +21,12 @@ const writeUserDB = () => {
             if (err) console.log(err);
         },
     );
+};
+
+const readUserDB = () => {
+    const readFile = fs.readFileSync("./users.json", "utf-8");
+    const allUsers = JSON.parse(readFile);
+    return allUsers;
 };
 
 app.use((req, res, next) => {
@@ -33,6 +39,7 @@ app.use((req, res, next) => {
 });
 
 app.post("/bank/:user", (req, res) => {
+    let allUsers = readUserDB();
     const newUser = {
         name: req.params.user,
         password: req.body.password,
@@ -43,11 +50,12 @@ app.post("/bank/:user", (req, res) => {
 
     allUsers = [...allUsers, newUser];
 
-    writeUserDB();
+    writeUserDB(allUsers);
     res.json(newUser);
 });
 
 app.get("/bank/:id/balance", (req, res) => {
+    const allUsers = readUserDB();
     const userID = parseInt(req.params.id, 10);
     const account = allUsers[userID - 1];
     if (account && account.password === req.body.password) {
@@ -58,6 +66,7 @@ app.get("/bank/:id/balance", (req, res) => {
 });
 
 app.put("/bank/:id/withdraw", (req, res) => {
+    const allUsers = readUserDB();
     const userID = parseInt(req.params.id, 10);
     const account = allUsers[userID - 1];
     const withdraw = parseInt(req.body.amount, 10);
@@ -70,10 +79,11 @@ app.put("/bank/:id/withdraw", (req, res) => {
     } else {
         res.status(404).end();
     }
-    writeUserDB();
+    writeUserDB(allUsers);
 });
 
 app.put("/bank/:id/deposit", (req, res) => {
+    const allUsers = readUserDB();
     const userID = parseInt(req.params.id, 10);
     const account = allUsers[userID - 1];
     const deposit = parseInt(req.body.amount, 10);
@@ -83,10 +93,11 @@ app.put("/bank/:id/deposit", (req, res) => {
     } else {
         res.status(404).end();
     }
-    writeUserDB();
+    writeUserDB(allUsers);
 });
 
 app.put("/bank/:id/transfer", (req, res) => {
+    const allUsers = readUserDB();
     const userID = parseInt(req.params.id, 10);
     const transferID = parseInt(req.body.recipient_id, 10);
     const account = allUsers[userID - 1];
@@ -103,30 +114,32 @@ app.put("/bank/:id/transfer", (req, res) => {
     } else {
         res.status(404).end();
     }
-    writeUserDB();
+    writeUserDB(allUsers);
 });
 
 app.put("/bank/:id/name", (req, res) => {
+    const allUsers = readUserDB();
     const userID = parseInt(req.params.id, 10);
     const newName = req.body.new_name;
     const account = allUsers[userID - 1];
     if (account && account.password === req.body.password && newName !== account.name) {
         account.name = newName;
         res.json(`This account new name is ${account.name}.`);
-        writeUserDB();
+        writeUserDB(allUsers);
     } else {
         res.status(404).end();
     }
 });
 
 app.put("/bank/:id/password", (req, res) => {
+    const allUsers = readUserDB();
     const userID = parseInt(req.params.id, 10);
     const newPass = req.body.new_password;
     const account = allUsers[userID - 1];
     if (account && account.password === req.body.password && newPass !== account.password) {
         account.password = newPass;
         res.json(`This account new password is ${account.password}.`);
-        writeUserDB();
+        writeUserDB(allUsers);
     } else {
         res.status(404).end();
     }
