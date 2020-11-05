@@ -1,8 +1,9 @@
 
-POST http://localhost:5000/bank/Janne Niinimaa HTTP/1.1
+POST http://localhost:5000/bank/new HTTP/1.1
 Content-Type: application/json
 
 {
-    "deposit":44,
-    "password": "passu"
+    "name":"Teppo Testaaja",
+    "password": "passu",
+    "balance" : 44
 }

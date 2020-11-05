@@ -1,3 +1,40 @@
+import express from "express";
+import mongoose from "mongoose";
+import bankRouter from "./routes/bankrouter.js";
+
+const requestLogger = (req, res, next) => {
+    console.log(`METHOD: ${req.method}`);
+    console.log(`PATH: ${req.path}`);
+    console.log("BODY: ", req.body);
+    console.log("-----");
+    next();
+};
+
+const app = express();
+const mongoUrl = "mongodb://localhost:27017/bankdb";
+
+const connectMongoose = async () => {
+    await mongoose.connect(
+        mongoUrl,
+        { useNewUrlParser: true, useUnifiedTopology: true },
+    );
+};
+
+connectMongoose();
+app.use(express.json());
+
+app.get("/", (req, res) => {
+    res.send("Welcome to Roskapankki™");
+});
+
+app.use(requestLogger);
+app.use("/bank/", bankRouter);
+
+app.listen(5000, () => {
+    console.log("listening to port 5000");
+});
+
+/*
 // WEEK 2 REST API
 import * as fs from "fs";
 
@@ -146,3 +183,4 @@ app.put("/bank/:id/password", (req, res) => {
 });
 
 app.listen(5000);
+*/
