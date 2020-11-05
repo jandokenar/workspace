@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import bankRouter from "./routes/bankrouter.js";
+import bankRouter from "./routes/bankRouter.js";
 
 const requestLogger = (req, res, next) => {
     console.log(`METHOD: ${req.method}`);
@@ -35,7 +35,7 @@ app.listen(5000, () => {
 });
 
 /*
-// WEEK 2 REST API
+// WEEK 2 OLD .json filesystem code
 import * as fs from "fs";
 
 import express from "express";

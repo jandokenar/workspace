@@ -4,5 +4,5 @@ Content-Type: application/json
 
 {
     "password": "passu",
-    "amount": 10
+    "amount": 100
 }
