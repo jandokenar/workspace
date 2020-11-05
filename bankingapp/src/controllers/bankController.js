@@ -31,7 +31,7 @@ export const withdrawFunds = async (req, res) => {
     const account = await BankModel.findOne({ id: req.params.id });
     if (account) {
         if (account.password === req.body.password) {
-            const withdraw = parseFloat(req.body.amount);
+            const withdraw = parseInt(req.body.amount1, 10);
             if (withdraw <= account.balance && withdraw > 0) {
                 account.balance -= withdraw;
                 res.json(`This account new balance is ${account.balance}€.`);
@@ -51,7 +51,7 @@ export const depositFunds = async (req, res) => {
     const account = await BankModel.findOne({ id: req.params.id });
     if (account) {
         if (account.password === req.body.password) {
-            const deposit = parseFloat(req.body.amount);
+            const deposit = parseInt(req.body.amount, 10);
             if (deposit > 0) {
                 account.balance += deposit;
                 res.json(`This account new balance is ${account.balance}€.`);
@@ -72,7 +72,7 @@ export const transferFunds = async (req, res) => {
     const transferAccount = await BankModel.findOne({ id: req.body.recipient_id });
     if (account && transferAccount) {
         if (account.password === req.body.password) {
-            const transfer = parseFloat(req.body.amount);
+            const transfer = parseInt(req.body.amount, 10);
             if (transfer <= account.balance && transfer > 0) {
                 account.balance -= transfer;
                 transferAccount.balance += transfer;
