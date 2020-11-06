@@ -4,6 +4,6 @@ Content-Type: application/json
 
 {
     "password": "passu",
-    "recipient_id": 2,
-    "amount": 1
+    "recipient_id": 3,
+    "amount": 10
 }

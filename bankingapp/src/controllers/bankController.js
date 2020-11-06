@@ -187,21 +187,31 @@ export const acceptFundReq = async (req, res) => {
     if (account) {
         const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
         if (isPassMatch) {
-            let totalTransfer = 0;
-            account.fund_requests.forEach(async (element) => {
-                const destAccount = await BankModel.findOne({ id: element.reqid });
-                if ((account.balance - totalTransfer) >= element.amount) {
-                    totalTransfer += element.amount;
-                    destAccount.balance += element.amount;
-                    await destAccount.save();
-                } else {
-                    res.json("One or more fund request(s) were rejected. Not enough funds.");
-                }
-                account.balance -= totalTransfer;
-                res.json(`You have transffered ${totalTransfer}€ total.`);
-                account.fund_requests = [];
+            if (account.fund_requests.length > 0) {
+                let msg = "";
+                let newBalance = account.balance;
+                account.fund_requests.forEach(async (element) => {
+                    const destAccount = await BankModel.findOne({ id: element.reqid });
+                    if (newBalance >= element.amount) {
+                        newBalance -= element.amount;
+                        destAccount.balance += element.amount;
+                        await destAccount.save();
+                    } else {
+                        msg = "One or more fund request(s) were rejected. Not enough funds. ";
+                    }
+                });
+                account.fund_requests.forEach((element) => { // another non async loop
+                    if (account.balance >= element.amount) {
+                        account.balance -= element.amount;
+                    }
+                });
+                // account.fund_requests = [];
                 await account.save();
-            });
+
+                res.json(`${msg}You have made transfers.`);
+            } else {
+                res.json("You have no fund requests.");
+            }
         } else {
             res.json("Invalid password.");
         }

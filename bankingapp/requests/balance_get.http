@@ -1,5 +1,5 @@
 
-GET http://localhost:5000/bank/1/balance HTTP/1.1
+GET http://localhost:5000/bank/3/balance HTTP/1.1
 Content-Type: application/json
 
 {
