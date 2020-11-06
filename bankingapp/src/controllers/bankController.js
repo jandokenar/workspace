@@ -18,7 +18,6 @@ export const newAccount = async (req, res) => {
 export const getBalance = async (req, res) => {
     const account = await BankModel.findOne({ id: req.params.id });
     if (account) {
-        // const passwordHash = bcrypt.hashSync('passu', 10);
         const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
         if (isPassMatch) {
             res.json(`This account balance is ${account.balance}€.`);
@@ -139,3 +138,154 @@ export const changePassword = async (req, res) => {
         res.status(404).end();
     }
 };
+
+export const newFundReq = async (req, res) => {
+    const account = await BankModel.findOne({ id: req.params.id });
+    if (account) {
+        const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
+        if (isPassMatch) {
+            const reqAmount = parseInt(req.body.amount, 10);
+            if (reqAmount > 0) {
+                const reqAccount = await BankModel.findOne({ id: req.body.recipient_id });
+                let funds = reqAccount.fund_requests;
+                const fundReq = {
+                    reqid: parseInt(req.params.id, 10),
+                    amount: reqAmount,
+                };
+                funds = [...funds, fundReq];
+                reqAccount.fund_requests = funds;
+                res.json("Awesome! We’ll request that amount from " +
+                `the user with ID: ${req.body.recipient_id}.`);
+                await reqAccount.save();
+            } else {
+                res.json("Transfer request must be over 0€");
+            }
+        } else {
+            res.json("Invalid password.");
+        }
+    } else {
+        res.status(404).end();
+    }
+};
+
+export const getFundReq = async (req, res) => {
+    const account = await BankModel.findOne({ id: req.params.id });
+    if (account) {
+        const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
+        if (isPassMatch) {
+            res.json(account.fund_requests);
+        } else {
+            res.json("Invalid password.");
+        }
+    } else {
+        res.status(404).end();
+    }
+};
+
+export const acceptFundReq = async (req, res) => {
+    const account = await BankModel.findOne({ id: req.params.id });
+    if (account) {
+        const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
+        if (isPassMatch) {
+            let totalTransfer = 0;
+            account.fund_requests.forEach(async (element) => {
+                const destAccount = await BankModel.findOne({ id: element.reqid });
+                if ((account.balance - totalTransfer) >= element.amount) {
+                    totalTransfer += element.amount;
+                    destAccount.balance += element.amount;
+                    await destAccount.save();
+                } else {
+                    res.json("One or more fund request(s) were rejected. Not enough funds.");
+                }
+                account.balance -= totalTransfer;
+                res.json(`You have transffered ${totalTransfer}€ total.`);
+                account.fund_requests = [];
+                await account.save();
+            });
+        } else {
+            res.json("Invalid password.");
+        }
+    } else {
+        res.status(404).end();
+    }
+};
+
+/*
+const requestFunds = () => {
+    if (loginId >= 0) {
+        let input = readline.question(
+            "So you want request funds from someone? Give us their ID : ",
+        );
+
+        let userID = parseInt(input, 10) - 1;
+
+        while (userID > allUsers.lengthreq || Number.isNaN(userID) || userID < 0) {
+            input = readline.question(`Mhmm, unfortunately an account with that ID does not exist.
+        Try again. : `);
+            userID = parseInt(input, 10) - 1;
+        }
+
+        input = readline.question(`Okay, we found an account with that ID.
+How much money do you want to request? : `);
+        input = parseInt(input, 10);
+        if (Number.isNaN(input) || input > 0) {
+            console.log(`Awesome! We’ll request that amount from the user with ${userID}.`);
+            let funds = allUsers[userID].fund_requests;
+            const fundReq = {
+                reqid: loginId,
+                amount: input,
+            };
+            funds = [...funds, fundReq];
+            allUsers[userID].fund_requests = funds;
+            writeUserDB();
+        }
+    } else {
+        console.log("Log in to transfer funds.");
+    }
+};
+
+const checkFundReq = () => {
+    if (loginId >= 0) {
+        let userID = 0;
+        if (allUsers[loginId].fund_requests.length > 0) {
+            allUsers[loginId].fund_requests.forEach((element) => {
+                userID = element.reqid + 1; // convert reqId to userID
+                console.log(`${element.amount} for user with ID ${userID}`);
+            });
+        } else {
+            console.log("No fund requests found.");
+        }
+    } else {
+        console.log("Log in to check funds.");
+    }
+};
+
+const acceptFundReq = () => {
+    if (loginId >= 0) {
+        let userID = 0;
+        allUsers[loginId].fund_requests.forEach((element) => {
+            userID = element.reqid + 1; // convert reqId to userID
+            const input = readline.question(`Okay, we found a request for your funds of
+${element.amount} euros for user with ID ${userID} Type yes to accept this request. : `);
+
+            if (input === "yes") {
+                console.log(`Good! Now these funds has been transferred to the account,
+with ID ${userID}`);
+
+                if (allUsers[loginId].balance >= element.amount) {
+                    allUsers[loginId].balance -= element.amount;
+                    allUsers[userID - 1].balance += element.amount;
+                } else {
+                    console.log("Fund request was rejected. Not enough funds.");
+                }
+            } else {
+                console.log("Fund request was rejected.");
+            }
+        });
+        allUsers[loginId].fund_requests = []; // tyhjennä requestit
+        writeUserDB();
+    } else {
+        console.log("Log in to transfer funds.");
+    }
+};
+*/
