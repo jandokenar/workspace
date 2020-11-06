@@ -9,7 +9,7 @@ const bankSchema = new mongoose.Schema({
 });
 
 const BankModel = mongoose.model(
-    "bank", bankSchema,
+    "account", bankSchema,
 );
 
 export default BankModel;
