@@ -13,13 +13,13 @@ const App = () => {
   const [route, setRoute] = useState("");
 
   const getData = async (route) => {
-    if (route.length > 2 && route.includes("*")) { //debug
+    if (route.length > 2 && route.startsWith("*")) { //debug commands are run uusing * wildcard
       const newRoute = route.includes("*") ? route.split("*")[1] : route;
       const url = `http://jsonplaceholder.typicode.com/${newRoute}`;
       const resp = await axios.get(`${url}`);
       setData(resp.data);
       setRoute(route);
-    } else if (route){
+    } else if (route) {
 
       const url = `http://jsonplaceholder.typicode.com/${route}`;
       const resp = await axios.get(`${url}`);
@@ -38,11 +38,11 @@ const App = () => {
       case "photos":
         return <Photos data={data} />;
       case "posts":
-          return <Posts data={data} />;
+        return <Posts data={data} />;
       case "albums":
-            return <Albums data={data} />;
+        return <Albums data={data} />;
       default:
-        if (route.includes("*")) {
+        if (route.startsWith("*")) {
           return <Debug data={data} />;
         } else {
           return "no data fetched";
