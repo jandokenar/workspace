@@ -7,9 +7,8 @@ const Photos = (props) => {
 
     const singlePhoto = () => (
         <div className="myArr">
-            <p><b>Title:</b> {data.title}</p>
-            <p><b>Url:</b> <a target="_blank" rel="noreferrer" href={data.url}>{data.url}</a></p>
-            <p><img src={data.url} alt={data.title}></img></p>
+            <p><h3>{data.title}</h3></p>
+            <p><a target="_blank" rel="noreferrer" href={data.url}><img src={data.url} alt={data.title}></img></a></p>
         </div>
     )
 
@@ -17,9 +16,8 @@ const Photos = (props) => {
 
         data.map((item, index) => (
             <div key={index} className="myArr">
-            <p><b>Title:</b> {item.title}</p>
-            <p><b>Url:</b> <a target="_blank" rel="noreferrer" href={item.url}>{item.url}</a></p>
-            <p><img src={item.url} alt={item.title}></img></p>
+            <p><h3>{item.title}</h3></p>
+            <p><a target="_blank" rel="noreferrer" href={item.url}><img src={item.url} alt={item.title}></img></a></p>
             </div>
         ))
     );
