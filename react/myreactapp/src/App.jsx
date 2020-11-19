@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Inputbar from "./components/Inputbar";
 import Todos from "./components/todos";
@@ -7,6 +7,7 @@ import Debug from "./components/debug";
 import Photos from "./components/photos";
 import Posts from "./components/posts";
 import Albums from "./components/albums";
+import "./components/component.css";
 
 const App = () => {
   const [data, setData] = useState();
@@ -51,8 +52,32 @@ const App = () => {
 
   }
 
+
+  function Clock(props) {
+    const [date, setDate] = useState(new Date());
+
+   useEffect(() => {
+    var timerID = setInterval( () => tick(), 1000 );
+  
+    return function cleanup() {
+        clearInterval(timerID);
+      };
+   });
+  
+     function tick() {
+      setDate(new Date());
+     }
+  
+     return (
+        <div className="mdc-button__ripple">
+          <h2>{date.toLocaleTimeString()}</h2>
+        </div>
+      );
+  }
+
   return (
     <div>
+     <Clock></Clock>
       <Inputbar getData={(route) => getData(route.trim())} />
       {selectOutputComponent()}
     </div>

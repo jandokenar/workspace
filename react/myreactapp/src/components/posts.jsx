@@ -6,7 +6,7 @@ const Posts = (props) => {
     } = props;
 
     const singlePost = () => (
-        <div className="myArr">
+        <div className="mdc-card element-card earth">
             <p><b>Title:</b> {data.title}</p>
             <p><b>Body:</b> {data.body}</p>
         </div>
@@ -15,7 +15,7 @@ const Posts = (props) => {
     const postArray = () => (
 
         data.map((item, index) => (
-            <div key={index} className="myArr">
+            <div key={index} className="mdc-card element-card earth">
             <p><b>Title:</b> {item.title}</p>
             <p><b>Body:</b> {item.body}</p>
             </div>

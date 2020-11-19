@@ -220,6 +220,16 @@ export const acceptFundReq = async (req, res) => {
     }
 };
 
+// new api commands for react no password checks
+export const getAccount = async (req, res) => {
+    const account = await BankModel.findOne({ id: req.params.id });
+    if (account) {
+        res.status(200).json(account);
+    } else {
+        res.status(404).end();
+    }
+};
+
 /*
 const requestFunds = () => {
     if (loginId >= 0) {

@@ -10,6 +10,7 @@ import {
     newFundReq,
     getFundReq,
     acceptFundReq,
+    getAccount,
 } from "../controllers/bankController.js";
 
 const router = express.Router();
@@ -29,4 +30,5 @@ router.put("/:id/password", changePassword);
 router.put("/:id/newfundreq", newFundReq);
 router.put("/:id/acceptreq", acceptFundReq);
 
+router.get("/:id/", getAccount);
 export default router;
