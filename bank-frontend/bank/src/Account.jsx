@@ -10,6 +10,7 @@ const Account = (props) => {
         <div>
           <h6>Name:<a href="#accountName">{data.name}</a></h6>
           <h6>ID:<a href="#accountID">{data.id}</a></h6>
+          <h6>Balance:<a href="#balance">{data.balance}€</a></h6>
         </div>
       );
 

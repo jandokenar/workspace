@@ -1,11 +1,10 @@
-// import React from "react";
 import React, { useState } from "react";
 import axios from "axios";
 import Account from "./Account";
 import Balance from "./Balance";
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import './App.css';
-import Inputbar from "./Inputbar";
+import Inputlogin from "./Inputlogin";
 
 function App() {
   const [data, setData] = useState(null);
@@ -38,9 +37,20 @@ function App() {
     } else {
       return (
         <div>
-          <h6>Login to bank using your ID</h6>
-          <h6><Inputbar getData={(route) => getData(route)} /></h6>
+          <h6>Login to bank using your bank ID:</h6>
+          <h6><Inputlogin getData={(route) => getData(route)} /></h6>
         </div>
+      );
+    }
+  }
+
+  const showName = () => {
+    if (data) {
+      return (
+        <div className="login">
+          {data.id}:&nbsp;{data.name}&nbsp;({data.balance}€)&nbsp;&nbsp;<button onClick={() => setData(null)}>x</button>
+        </div>
+
       );
     }
   }
@@ -48,12 +58,13 @@ function App() {
   return (
     <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <Router>
+        {showName()}
         <header className="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
           <div className="mdl-layout--large-screen-only mdl-layout__header-row">
             <h3>Roskapankki ™</h3>
           </div>
           <div className="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
-            <Link to="/" className="mdl-layout__tab"> Login </Link>
+            <Link to="/" className="mdl-layout__tab"> Home </Link>
             <Link to="/account" className="mdl-layout__tab"> Account </Link>
             <Link to="/balance" className="mdl-layout__tab"> Balance </Link>
             <Link to="/" className="mdl-layout__tab"> Withdraw </Link>

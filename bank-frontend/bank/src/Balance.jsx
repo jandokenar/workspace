@@ -7,7 +7,7 @@ const Balance = (props) => {
     if (data) {
       return (
         <div>
-          <h6>Your Accoun Balance:<a href="#accountBalance">{data.balance}€</a></h6>
+          <h6>Your Account Balance:<a href="#accountBalance">{data.balance}€</a></h6>
         </div>
       );
 
@@ -21,7 +21,7 @@ const Balance = (props) => {
     <div className="mdl-layout__tab-panel">
       <section className="section--center mdl-grid mdl-grid--no-spacing">
         <div className="mdl-cell mdl-cell--12-col">
-          <h4>Account</h4>
+          <h4>Balance</h4>
           <ul className="toc">
             {showData()}
           </ul>
