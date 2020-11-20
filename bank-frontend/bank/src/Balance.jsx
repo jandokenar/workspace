@@ -2,7 +2,6 @@ const Balance = (props) => {
   const { getData } = props;
 
   const showData = () => {
-    console.log(getData);
     const data = getData;
     if (data) {
       return (

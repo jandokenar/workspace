@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import Account from "./Account";
 import Balance from "./Balance";
+import Withdraw from "./Withdraw";
+import Deposit from "./Deposit";
+import Transfer from "./Transfer";
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Inputlogin from "./Inputlogin";
@@ -48,7 +51,8 @@ function App() {
     if (data) {
       return (
         <div className="login">
-          {data.id}:&nbsp;{data.name}&nbsp;({data.balance}€)&nbsp;&nbsp;<button onClick={() => setData(null)}>x</button>
+          {data.id}:&nbsp;{data.name}&nbsp;({data.balance}€)&nbsp;&nbsp;
+          <button onClick={() => setData(null)}>x</button>
         </div>
 
       );
@@ -67,9 +71,9 @@ function App() {
             <Link to="/" className="mdl-layout__tab"> Home </Link>
             <Link to="/account" className="mdl-layout__tab"> Account </Link>
             <Link to="/balance" className="mdl-layout__tab"> Balance </Link>
-            <Link to="/" className="mdl-layout__tab"> Withdraw </Link>
-            <Link to="/" className="mdl-layout__tab"> Deposit </Link>
-            <Link to="/" className="mdl-layout__tab"> Fund Requests </Link>
+            <Link to="/withdraw" className="mdl-layout__tab"> Withdraw </Link>
+            <Link to="/deposit" className="mdl-layout__tab"> Deposit </Link>
+            <Link to="/transfer" className="mdl-layout__tab"> Transfer Funds </Link>
           </div>
         </header>
         <Switch>
@@ -83,8 +87,17 @@ function App() {
               </section>
             </div>
           )} />
-          <Route exact path="/account" render={() => <Account getData={data} />} />
+          <Route exact path="/account" render={() => <Account getData={data}
+            setData={(route) => setData(route)} />} />
           <Route exact path="/balance" render={() => <Balance getData={data} />} />
+          <Route exact path="/withdraw" render={() =>
+            <Withdraw getData={data} setData={(route) => setData(route)} />} />
+
+          <Route exact path="/deposit" render={() =>
+            <Deposit getData={data} setData={(route) => setData(route)} />} />
+
+          <Route exact path="/transfer" render={() =>
+            <Transfer getData={data} setData={(route) => setData(route)} />} />
         </Switch>
       </Router>
     </div>
