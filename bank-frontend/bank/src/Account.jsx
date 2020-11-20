@@ -34,7 +34,7 @@ const Account = (props) => {
     if (edit) {
       return (
         <div>
-          <h6>Name:</h6><input type="text" value={name} onChange={(e) => setName(e.target.value)} />&nbsp;&nbsp;
+          <h6>Name:</h6><input type="text" defaultValue={name} onChange={(e) => setName(e.target.value)} />&nbsp;&nbsp;
           <button onClick={() => saveName(name)}>Save</button>
         </div>
       );
