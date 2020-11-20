@@ -32,19 +32,19 @@ export const getBalance = async (req, res) => {
 export const withdrawFunds = async (req, res) => {
     const account = await BankModel.findOne({ id: req.params.id });
     if (account) {
-        const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
-        if (isPassMatch) {
-            const withdraw = parseInt(req.body.amount, 10);
-            if (withdraw <= account.balance && withdraw > 0) {
-                account.balance -= withdraw;
-                res.json(`This account new balance is ${account.balance}€.`);
-                await account.save();
-            } else {
-                res.json("Not enough funds.");
-            }
+        // const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
+        // if (isPassMatch) {
+        const withdraw = parseInt(req.body.amount, 10);
+        if (withdraw <= account.balance && withdraw > 0) {
+            account.balance -= withdraw;
+            res.json(`This account new balance is ${account.balance}€.`);
+            await account.save();
         } else {
-            res.json("Invalid password.");
+            res.json("Not enough funds.");
         }
+        // } else {
+        //    res.json("Invalid password.");
+        // }
     } else {
         res.status(404).end();
     }
@@ -53,19 +53,19 @@ export const withdrawFunds = async (req, res) => {
 export const depositFunds = async (req, res) => {
     const account = await BankModel.findOne({ id: req.params.id });
     if (account) {
-        const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
-        if (isPassMatch) {
-            const deposit = parseInt(req.body.amount, 10);
-            if (deposit > 0) {
-                account.balance += deposit;
-                res.json(`This account new balance is ${account.balance}€.`);
-                await account.save();
-            } else {
-                res.json("Deposit must be over 0€");
-            }
+        // const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
+        // if (isPassMatch) {
+        const deposit = parseInt(req.body.amount, 10);
+        if (deposit > 0) {
+            account.balance += deposit;
+            res.json(`This account new balance is ${account.balance}€.`);
+            await account.save();
         } else {
-            res.json("Invalid password.");
+            res.json("Deposit must be over 0€");
         }
+        // } else {
+        //    res.json("Invalid password.");
+        // }
     } else {
         res.status(404).end();
     }
@@ -75,22 +75,26 @@ export const transferFunds = async (req, res) => {
     const account = await BankModel.findOne({ id: req.params.id });
     const transferAccount = await BankModel.findOne({ id: req.body.recipient_id });
     if (account && transferAccount) {
-        const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
-        if (isPassMatch) {
+        // const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
+        // if (isPassMatch) {
+        if (account.id !== transferAccount.id) {
             const transfer = parseInt(req.body.amount, 10);
             if (transfer <= account.balance && transfer > 0) {
                 account.balance -= transfer;
                 transferAccount.balance += transfer;
                 res.json(`${transfer}€ transfered to ID: ${transferAccount.id}. ` +
-                `This account new balance is ${account.balance}€.`);
+                    `This account new balance is ${account.balance}€.`);
                 await account.save();
                 await transferAccount.save();
             } else {
                 res.json("Not enough funds.");
             }
         } else {
-            res.json("Invalid password.");
+            res.json("You cant transfer funds to your own account");
         }
+        // } else {
+        //     res.json("Invalid password.");
+        // }
     } else {
         res.status(404).end();
     }
@@ -100,18 +104,18 @@ export const renameAccount = async (req, res) => {
     const account = await BankModel.findOne({ id: req.params.id });
     const newname = req.body.new_name;
     if (account && newname) {
-        const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
-        if (isPassMatch) {
-            if (newname !== account.name) {
-                account.name = newname;
-                await account.save();
-                res.json(`This account new name is ${newname}`);
-            } else {
-                res.json("New name must be different.");
-            }
+        // const isPassMatch = bcrypt.compareSync(req.body.password, account.password);
+        // if (isPassMatch) {
+        if (newname !== account.name) {
+            account.name = newname;
+            await account.save();
+            res.json(`This account new name is ${newname}`);
         } else {
-            res.json("Invalid password.");
+            res.json("New name must be different.");
         }
+        // } else {
+        //    res.json("Invalid password.");
+        // }
     } else {
         res.status(404).end();
     }
@@ -154,8 +158,7 @@ export const newFundReq = async (req, res) => {
                 };
                 funds = [...funds, fundReq];
                 reqAccount.fund_requests = funds;
-                res.json("Awesome! We’ll request that amount from " +
-                `the user with ID: ${req.body.recipient_id}.`);
+                res.json(`new fund req added to: ${req.body.recipient_id}.`);
                 await reqAccount.save();
             } else {
                 res.json("Transfer request must be over 0€");
@@ -181,6 +184,8 @@ export const getFundReq = async (req, res) => {
         res.status(404).end();
     }
 };
+
+/* ei toimi
 
 export const acceptFundReq = async (req, res) => {
     const account = await BankModel.findOne({ id: req.params.id });
@@ -219,8 +224,9 @@ export const acceptFundReq = async (req, res) => {
         res.status(404).end();
     }
 };
+*/
 
-// new api commands for react no password checks
+// new api command for react no password checks
 export const getAccount = async (req, res) => {
     const account = await BankModel.findOne({ id: req.params.id });
     if (account) {
