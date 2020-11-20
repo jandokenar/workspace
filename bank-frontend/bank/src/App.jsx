@@ -11,7 +11,6 @@ import Inputlogin from "./Inputlogin";
 
 function App() {
   const [data, setData] = useState(null);
-  //const [route, setRoute] = useState("");
 
   const getData = async (route) => {
     if (route) {
@@ -34,6 +33,7 @@ function App() {
         <div>
           <h6>{data.name} has now logged in.</h6>
           <button onClick={() => setData(null)}>Logout</button>
+          <div>&nbsp;</div>
         </div>
       );
 
