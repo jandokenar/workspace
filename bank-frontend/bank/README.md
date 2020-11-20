@@ -1,4 +1,4 @@
-![Alt text](/screenshot.png?raw=true "Screenshot")
+![Alt text](/relative/path/to/screenshot.png?raw=true "Screenshot")
 
 # Getting Started with Create React App
 
