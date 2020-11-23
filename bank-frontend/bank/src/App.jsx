@@ -11,22 +11,41 @@ import Inputlogin from "./Inputlogin";
 
 function App() {
   const [data, setData] = useState(null);
+  const [login, setlogin] = useState(true);
 
   const getData = async (route) => {
     if (route) {
       const url = `http://localhost:5000/bank/${route}/`;
-
-      const resp = await axios.get(`${url}`);
-      if (resp) {
-        setData(resp.data);
-      } else {
-        setData(null);
+      try {
+        const resp = await axios.get(`${url}`).catch(err => {
+          if (err.response.status === 404) {
+            setlogin(false);
+          }
+          throw err;
+        }
+        );
+        if (resp) {
+          setData(resp.data);
+          setlogin(true);
+        } else {
+          setData(null);
+          setlogin(false);
+        }
       }
+      catch (err) {
+        setlogin(false);
+      }
+
     } else {
       setData(null);
+      setlogin(false);
     }
   }
-
+  const showError = () => {
+    if (!login) {
+      return (`User not found.`);
+    }
+  }
   const showLogin = () => {
     if (data) {
       return (
@@ -42,6 +61,7 @@ function App() {
         <div>
           <h6>Login to bank using your bank ID:</h6>
           <h6><Inputlogin getData={(route) => getData(route)} /></h6>
+          {showError()}
         </div>
       );
     }

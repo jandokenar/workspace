@@ -34,7 +34,7 @@ const Withdraw = (props) => {
       );
 
     } else {
-      return "User not found.";
+      return `User not logged in.`;
     }
   }
 

@@ -38,7 +38,7 @@ const Transfer = (props) => {
       );
 
     } else {
-      return "User not found.";
+      return "User not logged in.";
     }
   }
 
