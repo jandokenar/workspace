@@ -2,17 +2,18 @@ import axios from "axios";
 import React, { useState } from "react";
 
 const Deposit = (props) => {
+  const apipUrl = "http://localhost:5000/bank/"
   const [amount, setAmount] = useState();
   const { getData } = props;
   const { setData } = props;
 
   const makeDeposit = async (amount) => {
     if (amount && getData) {
-      const url = `http://localhost:5000/bank/${getData.id}/deposit`;
+      const url = `${apipUrl}${getData.id}/deposit`;
 
       const resp = await axios.put(`${url}`, { amount: amount });
       if (resp) {
-        const url2 = `http://localhost:5000/bank/${getData.id}/`;
+        const url2 = `${apipUrl}${getData.id}/`;
 
         const resp2 = await axios.get(`${url2}`);
         if (resp2) {
@@ -43,7 +44,7 @@ const Deposit = (props) => {
     <div className="mdl-layout__tab-panel">
       <section className="section--center mdl-grid mdl-grid--no-spacing">
         <div className="mdl-cell mdl-cell--12-col">
-          <h4>Deposit</h4>
+          <h4>&nbsp;&nbsp;Deposit</h4>
           <ul className="toc">
             {showData()}
           </ul>

@@ -2,17 +2,18 @@ import axios from "axios";
 import React, { useState } from "react";
 
 const Withdraw = (props) => {
+  const apipUrl = "http://localhost:5000/bank/";
   const [amount, setAmount] = useState();
   const { getData } = props;
   const { setData } = props;
 
   const makeWithdraw = async (amount) => {
     if (amount && getData) {
-      const url = `http://localhost:5000/bank/${getData.id}/withdraw`;
+      const url = `${apipUrl}${getData.id}/withdraw`;
 
       const resp = await axios.put(`${url}`, { amount: amount });
       if (resp) {
-        const url2 = `http://localhost:5000/bank/${getData.id}/`;
+        const url2 = `${apiUrl}${getData.id}/`;
 
         const resp2 = await axios.get(`${url2}`);
         if (resp2) {
@@ -22,7 +23,7 @@ const Withdraw = (props) => {
     }
   }
 
-  const showData = () => {
+  const showUserData = () => {
     const data = getData;
     if (data) {
       return (
@@ -43,9 +44,9 @@ const Withdraw = (props) => {
     <div className="mdl-layout__tab-panel">
       <section className="section--center mdl-grid mdl-grid--no-spacing">
         <div className="mdl-cell mdl-cell--12-col">
-          <h4>Withdraw</h4>
+          <h4>&nbsp;&nbsp;Withdraw</h4>
           <ul className="toc">
-            {showData()}
+            {showUserData()}
           </ul>
         </div>
       </section>

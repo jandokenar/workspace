@@ -1,8 +1,8 @@
 const Balance = (props) => {
-  const { getData } = props;
+  const { getUserData } = props;
 
-  const showData = () => {
-    const data = getData;
+  const showUserData = () => {
+    const data = getUserData;
     if (data) {
       return (
         <div>
@@ -20,9 +20,9 @@ const Balance = (props) => {
     <div className="mdl-layout__tab-panel">
       <section className="section--center mdl-grid mdl-grid--no-spacing">
         <div className="mdl-cell mdl-cell--12-col">
-          <h4>Balance</h4>
+          <h4>&nbsp;&nbsp;Balance</h4>
           <ul className="toc">
-            {showData()}
+            {showUserData()}
           </ul>
         </div>
       </section>

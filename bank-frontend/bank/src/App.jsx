@@ -10,12 +10,13 @@ import './App.css';
 import Inputlogin from "./Inputlogin";
 
 function App() {
-  const [data, setData] = useState(null);
+  const apiUrl = "http://localhost:5000/bank/";
+  const [data, setUserData] = useState(null);
   const [login, setlogin] = useState(true);
 
-  const getData = async (route) => {
+  const getUserData = async (route) => {
     if (route) {
-      const url = `http://localhost:5000/bank/${route}/`;
+      const url = `${apiUrl}${route}/`;
       try {
         const resp = await axios.get(`${url}`).catch(err => {
           if (err.response.status === 404) {
@@ -25,10 +26,10 @@ function App() {
         }
         );
         if (resp) {
-          setData(resp.data);
+          setUserData(resp.data);
           setlogin(true);
         } else {
-          setData(null);
+          setUserData(null);
           setlogin(false);
         }
       }
@@ -37,7 +38,7 @@ function App() {
       }
 
     } else {
-      setData(null);
+      setUserData(null);
       setlogin(false);
     }
   }
@@ -50,18 +51,23 @@ function App() {
     if (data) {
       return (
         <div>
-          <h6>{data.name} has now logged in.</h6>
-          <button onClick={() => setData(null)}>Logout</button>
-          <div>&nbsp;</div>
+          <ul className="toc">
+            <div>
+              <h6>{data.name} has now logged in.</h6>
+              <button onClick={() => setUserData(null)}>Logout</button>
+            </div>
+          </ul>
         </div>
       );
 
     } else {
       return (
         <div>
-          <h6>Login to bank using your bank ID:</h6>
-          <h6><Inputlogin getData={(route) => getData(route)} /></h6>
-          {showError()}
+          <ul className="toc">
+            <h6>Login to bank using your bank ID:</h6>
+            <Inputlogin getUserData={(route) => getUserData(route)} />
+            {showError()}
+          </ul>
         </div>
       );
     }
@@ -72,9 +78,30 @@ function App() {
       return (
         <div className="login">
           {data.id}:&nbsp;{data.name}&nbsp;({data.balance}€)&nbsp;&nbsp;
-          <button onClick={() => setData(null)}>x</button>
+          <button onClick={() => setUserData(null)}>x</button>
         </div>
+      );
+    }
+  }
 
+  const showNavi = () => {
+    if (data) {
+      return (
+        <div>
+          <Link to="/" className="mdl-layout__tab"> Home </Link>
+          <Link to="/account" className="mdl-layout__tab"> Account </Link>
+          <Link to="/balance" className="mdl-layout__tab"> Balance </Link>
+          <Link to="/withdraw" className="mdl-layout__tab"> Withdraw </Link>
+          <Link to="/deposit" className="mdl-layout__tab"> Deposit </Link>
+          <Link to="/transfer" className="mdl-layout__tab"> Transfers </Link>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Link to="/" className="mdl-layout__tab"> Login </Link>
+          <Link to="/account" className="mdl-layout__tab"> Create Account </Link>
+        </div>
       );
     }
   }
@@ -88,12 +115,7 @@ function App() {
             <h3>Roskapankki ™</h3>
           </div>
           <div className="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
-            <Link to="/" className="mdl-layout__tab"> Home </Link>
-            <Link to="/account" className="mdl-layout__tab"> Account </Link>
-            <Link to="/balance" className="mdl-layout__tab"> Balance </Link>
-            <Link to="/withdraw" className="mdl-layout__tab"> Withdraw </Link>
-            <Link to="/deposit" className="mdl-layout__tab"> Deposit </Link>
-            <Link to="/transfer" className="mdl-layout__tab"> Transfer Funds </Link>
+            {showNavi()}
           </div>
         </header>
         <Switch>
@@ -101,23 +123,23 @@ function App() {
             <div className="mdl-layout__tab-panel">
               <section className="section--center mdl-grid mdl-grid--no-spacing">
                 <div className="mdl-cell mdl-cell--0-col">
-                  <h4>Welcome to Roskapankki.</h4>
+                  <h4>&nbsp;&nbsp;Welcome to Roskapankki.</h4>
                   {showLogin()}
                 </div>
               </section>
             </div>
           )} />
-          <Route exact path="/account" render={() => <Account getData={data}
-            setData={(route) => setData(route)} />} />
-          <Route exact path="/balance" render={() => <Balance getData={data} />} />
+          <Route exact path="/account" render={() => <Account getUserData={data}
+            setUserData={(route) => setUserData(route)} />} />
+          <Route exact path="/balance" render={() => <Balance getUserData={data} />} />
           <Route exact path="/withdraw" render={() =>
-            <Withdraw getData={data} setData={(route) => setData(route)} />} />
+            <Withdraw getUserData={data} setUserData={(route) => setUserData(route)} />} />
 
           <Route exact path="/deposit" render={() =>
-            <Deposit getData={data} setData={(route) => setData(route)} />} />
+            <Deposit getUserData={data} setUserData={(route) => setUserData(route)} />} />
 
           <Route exact path="/transfer" render={() =>
-            <Transfer getData={data} setData={(route) => setData(route)} />} />
+            <Transfer getUserData={data} setUserData={(route) => setUserData(route)} />} />
         </Switch>
       </Router>
     </div>
