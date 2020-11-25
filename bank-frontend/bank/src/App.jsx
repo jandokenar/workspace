@@ -52,8 +52,8 @@ function App() {
       return (
         <div>
           <ul className="toc">
+            <div>{data.name} has now logged in.</div>
             <div>
-              <h6>{data.name} has now logged in.</h6>
               <button onClick={() => setUserData(null)}>Logout</button>
             </div>
           </ul>
