@@ -7,7 +7,7 @@ const Account = (props) => {
   let [name, setName] = useState();
   const [balance, setBalance] = useState();
   const [edit, setEdit] = useState(false);
-  const { setData } = props;
+  const { setUserData } = props;
 
   if (getUserData && !name) {
     name = getUserData.name;
@@ -25,7 +25,7 @@ const Account = (props) => {
 
           const resp2 = await axios.get(`${url2}`);
           if (resp2) {
-            setData(resp2.data);
+            setUserData(resp2.data);
           }
         }
       }
@@ -43,7 +43,7 @@ const Account = (props) => {
         balance: balance
       });
       if (resp) {
-        setData(resp.data);
+        setUserData(resp.data);
       }
     }
   }
