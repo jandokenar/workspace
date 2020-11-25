@@ -20,6 +20,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/new", newAccount);
+router.post("/:id/newfundreq", newFundReq);
 router.get("/:id/balance", getBalance);
 router.get("/:id/fundreq", getFundReq);
 router.put("/:id/withdraw", withdrawFunds);
@@ -27,8 +28,7 @@ router.put("/:id/deposit", depositFunds);
 router.put("/:id/transfer", transferFunds);
 router.put("/:id/name", renameAccount);
 router.put("/:id/password", changePassword);
-router.post("/:id/newfundreq", newFundReq);
-// router.put("/:id/acceptreq", acceptFundReq);
+// router.put("/:id/acceptreq", acceptFundReq); // not implemented
 
 router.get("/:id/", getAccount);
 export default router;
