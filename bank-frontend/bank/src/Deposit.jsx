@@ -4,27 +4,27 @@ import React, { useState } from "react";
 const Deposit = (props) => {
   const apipUrl = "http://localhost:5000/bank/"
   const [amount, setAmount] = useState();
-  const { getData } = props;
-  const { setData } = props;
+  const { getUserData } = props;
+  const { setUserData } = props;
 
   const makeDeposit = async (amount) => {
-    if (amount && getData) {
-      const url = `${apipUrl}${getData.id}/deposit`;
+    if (amount && getUserData) {
+      const url = `${apipUrl}${getUserData.id}/deposit`;
 
       const resp = await axios.put(`${url}`, { amount: amount });
       if (resp) {
-        const url2 = `${apipUrl}${getData.id}/`;
+        const url2 = `${apipUrl}${getUserData.id}/`;
 
         const resp2 = await axios.get(`${url2}`);
         if (resp2) {
-          setData(resp2.data);
+          setUserData(resp2.data);
         }
       }
     }
   }
 
   const showData = () => {
-    const data = getData;
+    const data = getUserData;
     if (data) {
       return (
         <div>

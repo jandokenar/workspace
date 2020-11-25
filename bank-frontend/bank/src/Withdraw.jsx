@@ -2,29 +2,29 @@ import axios from "axios";
 import React, { useState } from "react";
 
 const Withdraw = (props) => {
-  const apipUrl = "http://localhost:5000/bank/";
+  const apiUrl = "http://localhost:5000/bank/";
   const [amount, setAmount] = useState();
-  const { getData } = props;
-  const { setData } = props;
+  const { getUserData } = props;
+  const { setUserData } = props;
 
   const makeWithdraw = async (amount) => {
-    if (amount && getData) {
-      const url = `${apipUrl}${getData.id}/withdraw`;
+    if (amount && getUserData) {
+      const url = `${apiUrl}${getUserData.id}/withdraw`;
 
       const resp = await axios.put(`${url}`, { amount: amount });
       if (resp) {
-        const url2 = `${apiUrl}${getData.id}/`;
+        const url2 = `${apiUrl}${getUserData.id}/`;
 
         const resp2 = await axios.get(`${url2}`);
         if (resp2) {
-          setData(resp2.data);
+          setUserData(resp2.data);
         }
       }
     }
   }
 
   const showUserData = () => {
-    const data = getData;
+    const data = getUserData;
     if (data) {
       return (
         <div>
