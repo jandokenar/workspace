@@ -64,7 +64,7 @@ function App() {
       return (
         <div>
           <ul className="toc">
-            <h6>Login to bank using your bank ID:</h6>
+            <h6>Login:</h6>
             <Inputlogin getUserData={(route) => getUserData(route)} />
             {showError()}
           </ul>
@@ -123,7 +123,7 @@ function App() {
             <div className="mdl-layout__tab-panel">
               <section className="section--center mdl-grid mdl-grid--no-spacing">
                 <div className="mdl-cell mdl-cell--0-col">
-                  <h4>&nbsp;&nbsp;Welcome to Roskapankki.</h4>
+                  <h4>&nbsp;&nbsp;Home</h4>
                   {showLogin()}
                 </div>
               </section>
