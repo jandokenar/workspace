@@ -1,0 +1,6 @@
+PUT http://localhost:5000/students/50/name HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Dan2"
+}
