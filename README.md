@@ -1,1 +1,1 @@
-![](screenshot.png)
+![](/bank-frontend/bank/screenshot.png)
